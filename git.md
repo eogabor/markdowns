@@ -335,9 +335,9 @@ Merging combines the work of independent branches. Usually involves a `topic bra
 * `Linear commit graph`
 
 ```shell
-git checkout <base branch>
-git merge <topic branch>         #attepmting a fast forward merge is the default
-git branch -d <topic branch>     #optionally deleting the topic branch label
+git checkout <base_branch>
+git merge <topic_branch>         #attepmting a fast forward merge is the default
+git branch -d <topic_branch>     #optionally deleting the topic branch label
 ```
 
 >Performing an `FF Merge`.
@@ -351,9 +351,48 @@ git branch -d <topic branch>     #optionally deleting the topic branch label
 ```shell
 git checkout <base branch>
 git merge <topic branch>              #then accept the default merge message or modify it 
-git branch -d <topic branch>   
+git branch -d <topic_branch>   
 
-git merge --no--ff <topic branch>     #force merge commit, even if it's fast forwardable
+git merge --no--ff <topic_branch>     #force merge commit, even if it's fast forwardable
 ```
 
->Performing a `Merge commit`.
+> Performing a `Merge commit`.
+
+### **Resolving a merge conflict**
+
+* `Merge conflicts` occour if different branches change the same parts(`hunks`) of the same files.
+* Small, frequent merges are advised
+* Involves 3 commits:
+  * `ours` / `mine`: Tip of the current branch
+  * `theirs`: Tip of the branch to be merged
+  * `merge base`: A common ancestor
+
+**Steps to resolve a merge conflict:**
+
+* Checkout `ours` branch
+* Merge `theirs` branch
+  * `CONFLICT` - Both modified the same `hunk` in the same file
+  * The `conflicted file` is in the working tree with conflict markers
+  * FIX `conflicting file` with a text editor
+* Stage `conflicting file`
+* Commit merge commit
+* Delete the `theirs` branch label
+
+```shell
+git merge <theirs_branch>   #CONFLICT occours and git notifies us
+git status                  #view the status of the conflict
+```
+
+## Tracking Branches
+
+* `Tracking branches` are named `<remote_repo_name>\<branch_name>`
+* They represent the state of the remote repository, but are only updated with network commands like `push` and `pull`
+* They aren't always synchronised
+
+```shell
+git branch --all             #displays all branches including tracking branches
+git log <remote> --oneline   #<remote> can be used instead of <remote>/<branch> in git commands (because of the default remote tracking branch: remotes/origin/head)
+git remote set-head <remote> <branch>   #set the default remote tracking branch
+git status                              #includes tracking branch status(only locally, still need push or pull)
+git log --all                           #combined log of local and tracking branches
+```
